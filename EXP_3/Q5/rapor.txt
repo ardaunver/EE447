@@ -1,0 +1,36 @@
+Port B is used for Step Motor PB0,PB1,PB2,PB3 as outputs
+(connect 12V to VBus, GND to GND)
+Port E is used for Push Buttons PE0,PE1,PE2,PE3 as inputs
+(connect VCC to +3.3V, GND to GND)
+
+rotation = -1 means CW rotation (triggered with PushButton1)
+rotation = 0 means idle mode (no rotation)
+rotation = 1 means CCW rotation (triggered with PushButton2)
+
+Initial value of SysTick->LOAD determines the initial speed.
+
+Change of GPIOB->DATA can be observed at
+memory location of 0x400053FC.
+GPIOB->DATA will be either one of the following: 1,2,4,8, indicating the motor coils.
+
+
+Remark: You can also call for another function in SysTick_Handler.
+
+void SysTick_Handler (void){
+	button_pressed(rot);
+}
+
+void button_pressed(rot){
+	....
+	Write your code here
+	....
+}
+
+Change of GPIOE->DATA can be observed at
+memory location of 0x400243FC.
+GPIOE->DATA is 0x0F by default.
+When PushButton1 is pressed, GPIOE->DATA = 0x0E.
+When PushButton1 is pressed, GPIOE->DATA = 0x0D.
+
+SPEED DOWN by increasing the period of the SysTick Interrupt.
+SPEED UP by decreasing the period of the SysTick Interrupt.

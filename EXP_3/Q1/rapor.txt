@@ -1,0 +1,18 @@
+
+For Question 1, the procedure is highly familiar. Previously, there were 3 output pins corresponding to 3 colors 
+and we were able to turn each color on, periodically. Working principles of a Step Motor resembles this. There are 4 
+input pins for a Step Motor. When one pin is set to high, one transistor gets activated, providing energy to the motor 
+coil, that it's connected. At each step, one motor coil should be energized. When the motor coils are energized, one at 
+a time and one after another, the motor rotates a constant amount of degrees. When the procedure is reversed (reversing 
+the order in which the motor coils are energized), the motor rotates in the reversed direction. 
+
+The main code starts with the initial configuration of the registers and the clock. SysTick->LOAD holds the amount of cycles 
+passed before the system enters the SysTick Interrupt. A variable with the name "step" is initialized to zero before the while(1) 
+loop. Step is incremented at each loop cycle. 
+
+0 <= Step < 5,000,000 ...................... GPIOB_DATA is set to 0001 ---> rotation is set to 0 (CW) ----> Systick_Handler()
+5,000,000 <= Step < 10,000,000 ............. GPIOB_DATA is set to 1000 ---> rotation is set to 0 (CCW) ---> Systick_Handler()
+Step = 10,000,001 .......................... Step is set to 0
+
+Systick_Handler() ----> rotation = 0 ----> GPIOB_DATA is doubled (LSL) ----> if GPIOB_DATA is 1000, set it back to 0001
+		 |----> rotation = 1 ----> GPIOB_DATA is halved (LSR) ----> if GPIOB_DATA is 0001, set it back to 1000
